@@ -65,7 +65,7 @@ class DomManager {
             .then(() => {
                 return StudentService.getAllStudents();
             })
-            .then((student) => this.render(student))
+            .then((Students) => this.render(Students))
     }
 
 
@@ -74,7 +74,7 @@ class DomManager {
             .then(() => {
                 return StudentService.getAllStudents();
             })
-            .then((Student) => this.render(Student));
+            .then((Students) => this.render(Students));
     }
 
     static addGrade(id) {
@@ -121,12 +121,12 @@ class DomManager {
 
             );
             console.log(Student)
-            for (let grade of Student.grade) {
+            for (const grade of Student.grade) {
                 $(`#${Student.id}`).find('.card-body').append(
                     `<p>
-                        <span id="name-${grade.id}"><strong>Subject:</strong> ${grade.subject}</span>
-                        <span id="name-${grade.id}"><strong>grade:</strong> ${grade.grade}</span>
-                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${Student.id}', '${grade.id}')">delete room</button>
+                        <span id="name-${grade.subject}"><strong>Subject:</strong> ${grade.subject}</span>
+                        <span id="name-${grade.subject}"><strong>grade:</strong> ${grade.grade}</span>
+                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${Student.id}', '${grade.subject}')">delete room</button>
                     </p>
                     
                     `
