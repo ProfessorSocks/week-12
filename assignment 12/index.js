@@ -121,17 +121,18 @@ class DomManager {
 
             );
             console.log(Student)
-            for (const grade of Student.grade) {
-                $(`#${Student.id}`).find('.card-body').append(
+            for (let grade of Student.grade) {
+                $(`#${Student.id}`).find('.card-body').prepend(
                     `<p>
-                        <span id="name-${grade.subject}"><strong>Subject:</strong> ${grade.subject}</span>
-                        <span id="name-${grade.subject}"><strong>grade:</strong> ${grade.grade}</span>
-                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${Student.id}', '${grade.subject}')">delete room</button>
+                    <span id="subject-${Student.id}"><strong>Subject:</strong> ${grade.subject}</span>
+                    <span id="grade-${Student.id}"><strong>Grade:</strong> ${grade.grade}</span>
+                    <button class="btn btn-danger" onclick="DomManager.deleteGrade('${Student.id}', '${grade.subject}')">Delete Grade</button>
                     </p>
                     
                     `
                 )
-            }
+                console.log(grade)
+            };
         }
     }
 }
