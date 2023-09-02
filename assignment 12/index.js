@@ -80,12 +80,12 @@ class DomManager {
     static addGrade(id) {
         for (let student of this.Students) {
             if (student.id == id) {
-                student.grade.push(new Grade($(`#${Student.id}-subject`).val(), $(`#${Student.id}-grade`).val()));
+                student.grade.push(new Grade($(`#${student.id}-subject`).val(), $(`#${student.id}-grade`).val()));
                 StudentService.updateStudent(student)
                     .then(() => {
                         return StudentService.getAllStudents()
                     })
-                    .then((student) => this.render(student));
+                    .then((Students) => this.render(Students));
             }
         }
     }
@@ -121,12 +121,12 @@ class DomManager {
 
             );
             console.log(Student)
-            for (grade of Student.grade) {
+            for (let grade of Student.grade) {
                 $(`#${Student.id}`).find('.card-body').append(
                     `<p>
                         <span id="name-${grade.id}"><strong>Subject:</strong> ${grade.subject}</span>
                         <span id="name-${grade.id}"><strong>grade:</strong> ${grade.grade}</span>
-                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${student.id}', '${grade.id}')">delete room</button>
+                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${Student.id}', '${grade.id}')">delete room</button>
                     </p>
                     
                     `
