@@ -35,7 +35,7 @@ class StudentService {
 
     static updateStudent(Student) {
         return $.ajax({
-            url: this.url + `/${Student._id}`,
+            url: this.url + `/${Student.id}`,
             datatype: 'json',
             data: JSON.stringify(Student),
             contentType: `application/json`,
@@ -60,12 +60,34 @@ class DomManager {
         StudentService.getAllStudents().then(Students => this.render(Students));
     }
 
-    static deleteStudent(id){
-        StudentService.deleteStudent(id)
-            .then(()=> {
+    static createStudent(name) {
+        StudentService.createStudent(new Student(name))
+            .then(() => {
                 return StudentService.getAllStudents();
             })
-            .then((Student)=> this.render(Student));
+            .then((student) => this.render(student))
+    }
+
+
+    static deleteStudent(id) {
+        StudentService.deleteStudent(id)
+            .then(() => {
+                return StudentService.getAllStudents();
+            })
+            .then((Student) => this.render(Student));
+    }
+
+    static addGrade(id) {
+        for (let student of this.Students) {
+            if (student.id == id) {
+                student.grade.push(new Grade($(`#${Student.id}-subject`).val(), $(`#${Student.id}-grade`).val()));
+                StudentService.updateStudent(student)
+                    .then(() => {
+                        return StudentService.getAllStudents()
+                    })
+                    .then((student) => this.render(student));
+            }
+        }
     }
 
     static render(Students) {
@@ -76,19 +98,19 @@ class DomManager {
                 `<div id=${Student.id}" class="card">
                     <div class="card-header">
                         <h2>${Student.name}</h2>
-                        <button class="btn btn-danger" onClick="DomManager.deleteStudent('${Student._id}')">Delete</button>
+                        <button class="btn btn-danger" onClick="DomManager.deleteStudent('${Student.id}')">Delete</button>
                     </div>
                     <div class='card-body'>
                         <div class="card">
                             <div class='row'>
                                 <div class="col-sm">
-                                    <input type='text' id="${Student._id}-subject" class='form-control' placeholder="Subject Name">
+                                    <input type='text' id="${Student.id}-subject" class='form-control' placeholder="Subject Name">
                                 </div>
                                 <div class="col-sm">
-                                    <input type='text' id="${Student._id}-grade" class='form-control' placeholder="Grade Name">
+                                    <input type='text' id="${Student.id}-grade" class='form-control' placeholder="Grade Name">
                                 </div>
                             </div>
-                            <button id="${Student._id}-new-subject" onclick="DomManager.addSubject('${Student._id}')" class="btn btn-primary form-control">add</button>
+                            <button id="${Student.id}-new-grade" onclick="DomManager.addGrade('${Student.id}')" class="btn btn-primary form-control">add</button>
                         </div>
                             
                     
@@ -96,23 +118,29 @@ class DomManager {
                 
                 </div><br>
                 `
-            
+
             );
             console.log(Student)
-            for(grade of Student.grade){
-                $(`#${Student._id}`).find('.card-body').append(
+            for (grade of Student.grade) {
+                $(`#${Student.id}`).find('.card-body').append(
                     `<p>
-                        <span id="name-${grade._id}"><strong>Subject:</strong> ${grade.subject}</span>
-                        <span id="name-${grade._id}"><strong>grade:</strong> ${grade.grade}</span>
-                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${student._id}', '${grade._id}')">delete room</button>
+                        <span id="name-${grade.id}"><strong>Subject:</strong> ${grade.subject}</span>
+                        <span id="name-${grade.id}"><strong>grade:</strong> ${grade.grade}</span>
+                        <button class="btn btn-danger " onclick="DomManager.deleteGrade('${student.id}', '${grade.id}')">delete room</button>
                     </p>
                     
                     `
                 )
             }
         }
-    }   
+    }
 }
 
-DomManager.getAllStudents()
-console.log(StudentService.getAllStudents())
+
+$('#create-new-student').click(() => {
+    DomManager.createStudent($('#new-student-name').val());
+    $('#new-student-name').val('');
+})
+DomManager.getAllStudents();
+
+
